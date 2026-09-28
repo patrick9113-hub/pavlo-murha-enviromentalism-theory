@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Чому теорія інвайроменталізму популярна сьогодні?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,500;7..72,600&family=Onest:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #0E2233;
+    --deep-2: #17384F;
+    --fog: #EDF1F3;
+    --paper: #F8FAFB;
+    --teal: #17808B;
+    --teal-dark: #0F5C66;
+    --amber: #E0A526;
+    --amber-deep: #A87400;
+    --ink: #16212B;
+    --muted: #556573;
+    --on-dark-muted: #A9BCC9;
+    --line: rgba(22, 33, 43, .16);
+    --serif: "Literata", "Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif;
+    --sans: "Onest", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #0A1722; overflow: hidden; }
+  body { font-family: var(--sans); color: var(--ink); -webkit-font-smoothing: antialiased; }
+
+  .deck { position: fixed; inset: 0; }
+  .stage {
+    position: absolute; left: 50%; top: 50%;
+    width: 1280px; height: 720px;
+    transform-origin: center center;
+    background: var(--fog);
+    overflow: hidden;
+  }
+
+  /* ---------- slides ---------- */
+  .slide {
+    position: absolute; inset: 0;
+    padding: 64px 88px 92px;
+    background: var(--fog);
+    color: var(--ink);
+    opacity: 0; visibility: hidden;
+    transform: translateX(28px);
+    transition: opacity .35s ease, transform .35s ease, visibility 0s linear .35s;
+  }
+  .slide.past { transform: translateX(-28px); }
+  .slide.active { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .slide.dark { background: var(--deep); color: #F2F6F8; }
+
+  h1, h2, h3 { font-family: var(--serif); font-weight: 600; letter-spacing: -.01em; }
+  h2 { font-size: 46px; line-height: 1.16; max-width: 1000px; }
+  h3 { font-size: 26px; line-height: 1.25; }
+  p { font-size: 24px; line-height: 1.5; }
+  .small { font-size: 17px; line-height: 1.45; color: var(--muted); }
+  .dark .small { color: var(--on-dark-muted); }
+  .src { position: absolute; left: 88px; right: 200px; bottom: 44px; font-size: 16px; line-height: 1.4; color: var(--muted); }
+  .dark .src { color: var(--on-dark-muted); }
+
+  /* ---------- title ---------- */
+  .isobars { position: absolute; pointer-events: none; }
+  .isobars path { fill: none; stroke: #7FB3C4; stroke-width: 1.2; }
+  .s-title h1 {
+    position: absolute; left: 88px; top: 210px; width: 680px;
+    font-size: 62px; line-height: 1.1;
+  }
+  .s-title .sub { position: absolute; left: 88px; top: 480px; width: 600px; font-size: 24px; line-height: 1.45; color: var(--on-dark-muted); }
+  .s-title .course { position: absolute; left: 88px; top: 90px; font-size: 18px; color: var(--amber); font-weight: 500; }
+
+  /* ---------- three theories ---------- */
+  .theories { display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 0; margin-top: 40px; border-top: 2px solid var(--ink); }
+  .theory { padding: 24px 28px 8px 0; }
+  .theory + .theory { padding-left: 28px; border-left: 1px solid var(--line); }
+  .theory h3 { margin-bottom: 12px; font-size: 30px; }
+  .theory p { font-size: 21px; color: var(--muted); }
+  .theory.main h3 { color: var(--teal-dark); }
+  .theory.main p { color: var(--ink); }
+  .approaches { margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .approach { background: var(--paper); border-left: 4px solid var(--teal); padding: 14px 18px; font-size: 19px; line-height: 1.4; }
+  .approach b { display: block; font-size: 21px; margin-bottom: 4px; }
+  .approach.hl { border-left-color: var(--amber); background: #FFF6DE; }
+
+  /* ---------- roots ---------- */
+  .roots { margin-top: 56px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+  .root h3 { font-size: 29px; margin-bottom: 6px; }
+  .root .who { font-size: 19px; color: var(--teal-dark); font-weight: 500; margin-bottom: 12px; }
+  .root p { font-size: 22px; line-height: 1.5; }
+  .root { border-top: 3px solid var(--teal); padding-top: 16px; }
+  .root:nth-child(2) { border-top-color: var(--amber); }
+  .root:nth-child(3) { border-top-color: var(--deep-2); }
+  .pull { margin-top: 44px; font-family: var(--serif); font-size: 30px; line-height: 1.4; max-width: 900px; color: var(--deep-2); }
+
+  /* ---------- reasons list ---------- */
+  .legend { display: flex; gap: 32px; margin-top: 24px; font-size: 19px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 10px; }
+  .dot { width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--teal); flex: none; }
+  .dot.full { background: var(--teal); }
+  .reasons { margin-top: 30px; }
+  .reason { display: grid; grid-template-columns: 34px 1fr 370px; align-items: center; column-gap: 12px; padding: 17px 0; border-bottom: 1px solid var(--line); }
+  .reason:first-child { border-top: 1px solid var(--line); }
+  .reason h3 { font-size: 30px; }
+  .reason .ev { font-size: 19px; color: var(--muted); line-height: 1.35; }
+
+  /* ---------- chart slides ---------- */
+  .split { display: grid; grid-template-columns: 560px 1fr; gap: 64px; margin-top: 40px; align-items: start; }
+  .points { display: grid; gap: 24px; }
+  .points p { font-size: 23px; padding-left: 18px; border-left: 3px solid var(--teal); }
+  .points p.warn { border-left-color: var(--amber); color: var(--muted); font-size: 19px; }
+  .chart text { font-family: var(--sans); }
+  .bar { transform-box: fill-box; transition: transform .8s cubic-bezier(.2,.7,.2,1) .25s; }
+  .bar.v { transform-origin: bottom; transform: scaleY(0); }
+  .bar.h { transform-origin: left; transform: scaleX(0); }
+  .slide.active .bar { transform: none; }
+  .val { font-family: var(--serif); font-weight: 600; }
+
+  /* ---------- institutional ---------- */
+  .iso { margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+  .iso div { border-top: 3px solid var(--teal); padding-top: 12px; }
+  .iso div:nth-child(2) { border-top-color: var(--amber); }
+  .iso div:nth-child(3) { border-top-color: var(--deep-2); }
+  .iso h3 { font-size: 26px; margin-bottom: 8px; }
+  .iso p { font-size: 21px; color: var(--muted); }
+  .findings { margin-top: 28px; display: grid; gap: 14px; }
+  .findings p { font-size: 20px; line-height: 1.42; padding: 13px 20px; background: var(--paper); border-left: 4px solid var(--amber); }
+
+  /* ---------- simplicity ---------- */
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 44px; }
+  .duo h3 { margin-bottom: 16px; color: var(--teal-dark); font-size: 30px; }
+  .duo p { font-size: 24px; }
+  .flag { display: inline-block; margin-top: 20px; font-size: 18px; color: var(--amber-deep); font-weight: 600; }
+
+  /* ---------- matrix ---------- */
+  .matrix-wrap { position: relative; padding: 0 0 34px 44px; }
+  .matrix { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 6px; width: 520px; height: 420px; }
+  .cell { background: var(--paper); padding: 18px 20px; font-size: 19px; line-height: 1.4; color: var(--muted); }
+  .cell b { display: block; font-family: var(--serif); font-size: 22px; color: var(--ink); margin-bottom: 6px; }
+  .cell.hit { background: var(--deep); color: #DCE7EC; }
+  .cell.hit b { color: var(--amber); }
+  .axis-x { position: absolute; left: 44px; bottom: 0; width: 520px; display: flex; justify-content: space-between; font-size: 17px; color: var(--muted); }
+  .axis-y { position: absolute; left: 0; top: 0; height: 420px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; font-size: 17px; color: var(--muted); writing-mode: vertical-rl; transform: rotate(180deg); }
+  .limits h3 { font-size: 28px; margin-bottom: 12px; }
+  .limits ul { list-style: none; display: grid; gap: 14px; margin-top: 18px; }
+  .limits li { font-size: 22px; line-height: 1.45; padding-left: 18px; border-left: 3px solid var(--teal); }
+  .limits li b { font-weight: 600; }
+
+  /* ---------- Ukraine case ---------- */
+  .case { margin-top: 34px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
+  .case h3 { font-size: 28px; margin-bottom: 14px; color: var(--teal-dark); }
+  .case p { font-size: 21px; line-height: 1.48; margin-bottom: 16px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+  .chip { font-size: 20px; padding: 8px 16px; border: 2px solid var(--teal); border-radius: 999px; }
+  .verdict { grid-column: 1 / -1; font-family: var(--serif); font-size: 27px; line-height: 1.4; padding-top: 20px; border-top: 2px solid var(--ink); }
+
+  /* ---------- conclusion ---------- */
+  .s-end h2 { max-width: 760px; }
+  .claims { margin-top: 48px; display: grid; gap: 28px; max-width: 720px; }
+  .claims p { font-size: 25px; line-height: 1.5; padding-left: 20px; border-left: 4px solid var(--amber); }
+  .s-end .fine { position: absolute; left: 88px; bottom: 50px; width: 640px; font-size: 17px; color: var(--on-dark-muted); line-height: 1.45; }
+
+  /* ---------- sources ---------- */
+  .cols { margin-top: 34px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+  .cols h3 { font-size: 26px; margin-bottom: 14px; color: var(--teal-dark); }
+  .cols ul { list-style: none; display: grid; gap: 11px; }
+  .cols li { font-size: 17px; line-height: 1.4; color: var(--ink); }
+
+  /* ---------- controls ---------- */
+  .progress { position: fixed; left: 0; top: 0; height: 4px; background: var(--amber); width: 0; transition: width .35s ease; z-index: 5; }
+  .ctrl { position: fixed; right: 20px; bottom: 16px; display: flex; align-items: center; gap: 8px; z-index: 5; color: #EAF1F5; font-size: 15px; background: rgba(14,34,51,.88); padding: 5px 8px; border-radius: 999px; }
+  .ctrl button {
+    width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(255,255,255,.35);
+    background: transparent; color: #fff; font-size: 18px; cursor: pointer;
+  }
+  .ctrl button:hover { background: var(--teal-dark); }
+  .ctrl button:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+  .ctrl .count { min-width: 54px; text-align: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide, .bar, .progress { transition: none !important; }
+  }
+
+  @media print {
+    @page { size: 1280px 720px; margin: 0; }
+    html, body { overflow: visible; height: auto; background: #fff; }
+    .deck { position: static; }
+    .stage { position: static; transform: none !important; height: auto; width: 1280px; overflow: visible; }
+    .slide { position: relative; opacity: 1; visibility: visible; transform: none; height: 720px; page-break-after: always; break-after: page; }
+    .bar { transform: none !important; }
+    .ctrl, .progress { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<main class="deck">
+<div class="stage" id="stage">
+
+  <!-- 1. Титул -->
+  <section class="slide dark s-title" aria-label="Титульний слайд">
+    <svg class="isobars" data-cfg='{"cx":430,"cy":330,"rings":16,"base":30,"gap":26,"squeeze":0.28,"seed":1}' width="860" height="720" viewBox="0 0 860 720" style="right:-40px;top:0" aria-hidden="true"></svg>
+    <p class="course">Управління змінами</p>
+    <h1>Чому теорія інвайроменталізму популярна сьогодні?</h1>
+    <p class="sub">Екстерналістська концепція джерел змін в організаціях: що в ній переконливо, а що ні</p>
+  </section>
+
+  <!-- 2. Три теорії -->
+  <section class="slide" aria-label="Місце теорії в класифікації">
+    <h2>Три відповіді на запитання, звідки беруться зміни в організації</h2>
+    <div class="theories">
+      <div class="theory main">
+        <h3>Екстерналістська</h3>
+        <p>Джерела будь-яких змін лежать за межами організації. Без зовнішніх сил вона залишається незмінною.</p>
+      </div>
+      <div class="theory">
+        <h3>Іманентних змін</h3>
+        <p>Зміни виникають із внутрішніх властивостей і ресурсів. Зовнішні чинники лише прискорюють або гальмують їх.</p>
+      </div>
+      <div class="theory">
+        <h3>Інтегральна</h3>
+        <p>Зміни — результат взаємодії внутрішніх і зовнішніх сил.</p>
+      </div>
+    </div>
+    <div class="approaches">
+      <div class="approach"><b>Механістичний підхід</b>Організація в спокої, доки зовнішня сила не виведе її з рівноваги.</div>
+      <div class="approach"><b>Біхевіористичний підхід</b>Без зовнішнього стимулу організація не здатна до трансформації.</div>
+      <div class="approach hl"><b>Інвайроментальний підхід</b>Зміни пояснюють силами середовища: воно формує, контролює й руйнує організацію.</div>
+    </div>
+    <p class="src">Три підходи — це внутрішній поділ екстерналістської теорії. Джерело: Захарова О.В. Управління організаційними змінами. Черкаси: ЧДТУ, 2016, розд. 1.2.</p>
+  </section>
+
+  <!-- 3. Академічне коріння -->
+  <section class="slide" aria-label="Академічне коріння">
+    <h2>Ідея не нова: її розвивали три великі школи теорії організацій</h2>
+    <div class="roots">
+      <div class="root">
+        <h3>Контингентний підхід</h3>
+        <div class="who">Бернс і Сталкер; Лоуренс і Лорш</div>
+        <p>Універсальної структури немає. Стабільне середовище потребує механістичної структури, динамічне — органічної.</p>
+      </div>
+      <div class="root">
+        <h3>Популяційна екологія</h3>
+        <div class="who">Ханнан і Фрімен</div>
+        <p>Зміни відбуваються переважно на рівні популяції: нові організації входять, старі витісняються. Окремій фірмі заважає структурна інерція.</p>
+      </div>
+      <div class="root">
+        <h3>Інституційна теорія</h3>
+        <div class="who">ДіМаджо і Пауелл; Пфеффер і Селанчик</div>
+        <p>Середовище — це ще й норми та очікування. Під їхнім тиском організації стають схожими між собою.</p>
+      </div>
+    </div>
+    <p class="pull">У «школі середовища» Мінцберга лідер майже пасивний: він зчитує середовище й забезпечує адаптацію.</p>
+    <p class="src">Джерела: Mintzberg, Ahlstrand, Lampel. Strategy Safari (1998); Hannan, Freeman (1977); DiMaggio, Powell (1983).</p>
+  </section>
+
+  <!-- 4. П'ять причин -->
+  <section class="slide" aria-label="П'ять причин популярності">
+    <h2>П'ять причин, чому ця логіка звучить переконливо саме зараз</h2>
+    <div class="legend">
+      <span><i class="dot full"></i> є дані або дослідження</span>
+      <span><i class="dot"></i> наша інтерпретація</span>
+    </div>
+    <div class="reasons">
+      <div class="reason"><i class="dot full"></i><h3>Середовище стало турбулентнішим</h3><span class="ev">Дані Innosight про життя компаній</span></div>
+      <div class="reason"><i class="dot full"></i><h3>Війна як зовнішній шок</h3><span class="ev">ЄБРР, ПРООН, UNIDO, українські статті</span></div>
+      <div class="reason"><i class="dot"></i><h3>Технології ламають галузі</h3><span class="ev">Частково підтверджено Innosight</span></div>
+      <div class="reason"><i class="dot full"></i><h3>Інституційний тиск: ESG і регулювання</h3><span class="ev">Емпіричні дослідження 2016–2026</span></div>
+      <div class="reason"><i class="dot"></i><h3>Проста схема для викладання</h3><span class="ev">Силабуси курсів; висновок — наш</span></div>
+    </div>
+    <p class="src">Прямих вимірювань «популярності» теорії ми не знайшли, тож це аргументація за джерелами, а не статистика.</p>
+  </section>
+
+  <!-- 5. Турбулентність -->
+  <section class="slide" aria-label="Тривалість життя компаній">
+    <h2>Компанії залишаються на вершині все коротше</h2>
+    <div class="split">
+      <svg class="chart" viewBox="0 0 560 380" role="img" aria-label="Стовпчикова діаграма середньої тривалості перебування компаній в індексі S&P 500: 33 роки в 1965, 20 років у 1990, прогноз 14 років на 2026">
+        <line x1="20" y1="330" x2="540" y2="330" stroke="#16212B" stroke-width="1.5"/>
+        <rect class="bar v" x="50" y="99" width="120" height="231" fill="#0F5C66"/>
+        <rect class="bar v" x="220" y="190" width="120" height="140" fill="#0F5C66"/>
+        <rect class="bar v" x="390" y="232" width="120" height="98" fill="#E0A526"/>
+        <text class="val" x="110" y="88" text-anchor="middle" font-size="30" fill="#16212B">33</text>
+        <text class="val" x="280" y="179" text-anchor="middle" font-size="30" fill="#16212B">20</text>
+        <text class="val" x="450" y="221" text-anchor="middle" font-size="30" fill="#16212B">14</text>
+        <text x="110" y="356" text-anchor="middle" font-size="17" fill="#556573">1965</text>
+        <text x="280" y="356" text-anchor="middle" font-size="17" fill="#556573">1990</text>
+        <text x="450" y="356" text-anchor="middle" font-size="17" fill="#556573">2026, прогноз</text>
+        <text x="20" y="28" font-size="17" fill="#556573">Середня тривалість перебування в S&amp;P 500, років</text>
+      </svg>
+      <div class="points">
+        <p>З 33 років у 1965-му до 20 у 1990-му. У 2016 році Innosight прогнозував 14 років до 2026-го.</p>
+        <p>Оновлений прогноз 2021 року м'якший: 15–20 років у цьому десятилітті.</p>
+        <p>За тодішнім темпом заміни близько половини індексу мало оновитися за десять років.</p>
+        <p class="warn">Це прогнози консалтингової фірми, а не рецензовані дослідження. Вихід з індексу не завжди означає загибель: компанію можуть придбати або вона просто втратить у вартості.</p>
+      </div>
+    </div>
+    <p class="src">Джерела: Innosight, Corporate Longevity (2016); 2021 Corporate Longevity Forecast.</p>
+  </section>
+
+  <!-- 6. Війна -->
+  <section class="slide" aria-label="Війна як зовнішній шок">
+    <h2>Війна: зовнішній шок у чистому вигляді</h2>
+    <div class="split">
+      <svg class="chart" viewBox="0 0 560 340" role="img" aria-label="Частка працюючих малих і середніх підприємств України: 57% навесні 2022, 84% у 2023, близько 85% у 2024–2025">
+        <text x="0" y="28" font-size="17" fill="#556573">Частка МСП, що працювали (хоча б частково)</text>
+        <text x="0" y="76" font-size="18" fill="#16212B">Березень–квітень 2022</text>
+        <rect class="bar h" x="0" y="88" width="376" height="46" fill="#E0A526"/>
+        <text class="val" x="392" y="122" font-size="30" fill="#16212B">57%</text>
+        <text x="0" y="176" font-size="18" fill="#16212B">2023</text>
+        <rect class="bar h" x="0" y="188" width="368" height="46" fill="#0F5C66" style="transform-origin:left"/>
+        <text class="val" x="384" y="222" font-size="30" fill="#16212B">84%</text>
+        <text x="0" y="276" font-size="18" fill="#16212B">2024–2025</text>
+        <rect class="bar h" x="0" y="288" width="372" height="46" fill="#0F5C66"/>
+        <text class="val" x="388" y="322" font-size="30" fill="#16212B">≈85%</text>
+      </svg>
+      <div class="points">
+        <p>У 2022 році спад реального ВВП України став найбільшим за весь період незалежності.</p>
+        <p>Навесні 2022-го працювала лише близько 57% МСП, але вже в 2023-му 84% відновили роботу хоча б частково.</p>
+        <p>Більшість підприємців, які зупинилися на початку війни, через півтора року ще не вийшли на повну потужність.</p>
+        <p class="warn">Для інвайроменталізму це зручний приклад: причина змін цілком зовнішня, а організації змінювалися вимушено.</p>
+      </div>
+    </div>
+    <p class="src">Джерела: VoxUkraine (2025) на даних ЄБРР і ПРООН; «Український бізнес в умовах війни» (ResearchGate).</p>
+  </section>
+
+  <!-- 7. Технології -->
+  <section class="slide" aria-label="Технології змінюють галузі">
+    <h2>Технології перекроюють галузі ззовні, і компанія не завжди встигає</h2>
+    <div class="duo">
+      <div>
+        <h3>Що показують дані</h3>
+        <p>За сім років з S&amp;P 500 вибули Eastman Kodak, Sprint, US Steel, Dell і New York Times. Їх замінили Facebook, PayPal і Netflix.</p>
+        <p style="margin-top:16px">За оцінкою Innosight 2021 року, компанії, що вибували чи були придбані, концентрувалися в галузях, які зливалися в три великі сектори. Пандемія прискорила тренди, що вже діяли.</p>
+      </div>
+      <div>
+        <h3>Що додаємо ми</h3>
+        <p>Цифровізація й штучний інтелект, імовірно, посилюють цю логіку: правила гри задає технологія, а не рішення окремої компанії.</p>
+        <span class="flag">Це припущення, а не результат дослідження</span>
+      </div>
+    </div>
+    <p class="src">Джерела: Innosight (2016; 2021); публікація в Inc. за звітом Innosight (2016).</p>
+  </section>
+
+  <!-- 8. Інституційний тиск -->
+  <section class="slide" aria-label="Інституційний тиск">
+    <h2>Інституційний тиск є, але діє нерівномірно</h2>
+    <div class="iso">
+      <div><h3>Примусовий</h3><p>Від регуляторів і залежності від сильних партнерів.</p></div>
+      <div><h3>Наслідувальний</h3><p>Копіювання успішних за умов невизначеності.</p></div>
+      <div><h3>Нормативний</h3><p>Професійні стандарти, освіта, мережі.</p></div>
+    </div>
+    <div class="findings">
+      <p>Міжнародне порівняння ESG-звітів: примусовий тиск переважає там, де регулювання суворе (ЄС), наслідувальний — на менш регульованих ринках.</p>
+      <p>Опитування 327 менеджерів з ESG: усі три види тиску підсилюють «ESG-washing», тобто формальні, а не змістовні зміни.</p>
+      <p>Європейські листи акціонерів (2026): лише нормативний ізоморфізм пов'язаний зі схожістю розкриття; примусовий і наслідувальний значущого зв'язку не показали.</p>
+    </div>
+    <p class="src">Джерела: Management Decision (2026); International Journal of Disclosure and Governance (2026); міжнародне дослідження ESG-наративів (2025).</p>
+  </section>
+
+  <!-- 9. Проста схема -->
+  <section class="slide" aria-label="Проста схема для викладання">
+    <h2>Проста схема легко запам'ятовується й добре працює як пояснення</h2>
+    <div class="duo">
+      <div>
+        <h3>У навчанні</h3>
+        <p>Трійка «екстерналістська — іманентна — інтегральна» є в програмах курсів з управління змінами кількох українських університетів (Харків, Запоріжжя, Житомир) і в посібнику ЧДТУ.</p>
+      </div>
+      <div>
+        <h3>У практиці менеджера</h3>
+        <p>Формула «так вимагає ринок» знімає з керівника відповідальність за рішення. Ризик у тому, що за нею можна сховати внутрішні проблеми.</p>
+        <span class="flag">Це наша інтерпретація</span>
+      </div>
+    </div>
+    <p class="src">Джерела: силабуси ХНУ ім. Каразіна, Запорізького та Житомирського університетів; Захарова О.В. (2016).</p>
+  </section>
+
+  <!-- 10. Межі -->
+  <section class="slide" aria-label="Межі теорії">
+    <h2>Межі: середовище не діє саме по собі</h2>
+    <div class="split" style="margin-top:24px; grid-template-columns: 600px 1fr; gap: 40px">
+      <div class="matrix-wrap">
+        <div class="axis-y"><span>Свобода вибору менеджерів</span></div>
+        <div class="matrix">
+          <div class="cell"><b>Стратегічний вибір</b>Адаптація за задумом, коли середовище майже не тисне.</div>
+          <div class="cell"><b>Диференціація</b>Вибір є, але діє в межах обмежень.</div>
+          <div class="cell"><b>Недиференційований вибір</b>Поступові кроки, адаптація випадково.</div>
+          <div class="cell hit"><b>Природний відбір</b>Мінімум вибору: організація виживає або вибуває. Територія інвайроменталізму.</div>
+        </div>
+        <div class="axis-x"><span>слабкий тиск середовища</span><span>сильний тиск середовища</span></div>
+      </div>
+      <div class="limits">
+        <h3>Обидві сили діють водночас</h3>
+        <p style="font-size:22px">Hrebiniak і Joyce (1985): вибір і детермінізм — незалежні змінні, а не суперники.</p>
+        <ul>
+          <li><b>Gopalakrishnan і Dugal (1998):</b> загалом переважає стратегічний вибір, але свободу менеджерів обмежують.</li>
+          <li><b>Галузь:</b> регулювання, стадія життєвого циклу.</li>
+          <li><b>Організація:</b> склад топ-менеджменту, розмір.</li>
+          <li><b>Час:</b> терміни, у які потрібно відреагувати.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="src">Джерела: Hrebiniak, Joyce. Administrative Science Quarterly (1985); Gopalakrishnan, Dugal. Int. J. of Organizational Analysis (1998).</p>
+  </section>
+
+  <!-- 11. Український кейс -->
+  <section class="slide" aria-label="Український досвід">
+    <h2>Шок однаковий, відповіді різні</h2>
+    <div class="case">
+      <div>
+        <h3>Хто зміг переїхати</h3>
+        <p>Опитування UNIDO (507 компаній, квітень 2024): схильність до релокації не залежить від розміру, але компанії, що більше експортували до війни, переїжджають частіше. Це можуть дозволити собі найресурсніші.</p>
+        <p>У дослідженні релокації IT-компаній (2025) західні регіони стали ключовими хабами, а 78% релокованих компаній відновили роботу.</p>
+      </div>
+      <div>
+        <h3>Які стратегії обирали</h3>
+        <div class="chips">
+          <span class="chip">реактивна</span>
+          <span class="chip">проактивна</span>
+          <span class="chip">часткова адаптація</span>
+          <span class="chip">системна трансформація</span>
+        </div>
+        <p>Так описує стратегії роздрібних мереж дослідження 2025 року. Воно ж фіксує зсув від «ефективності» до «стійкості» як головної управлінської парадигми.</p>
+      </div>
+      <p class="verdict">Зовнішній тиск запускає зміни, але якість відповіді залежить від внутрішніх ресурсів. Це аргумент на користь інтегральної теорії.</p>
+    </div>
+    <p class="src">Джерела: UNIDO IAP (2024); Olechnicka, Kniazevych. Int. Entrepreneurship Review (2025); Zenodo (2025).</p>
+  </section>
+
+  <!-- 12. Висновки -->
+  <section class="slide dark s-end" aria-label="Висновки">
+    <svg class="isobars" data-cfg='{"cx":330,"cy":360,"rings":12,"base":40,"gap":32,"squeeze":0.22,"seed":4}' width="660" height="720" viewBox="0 0 660 720" style="right:-30px;top:0;opacity:.55" aria-hidden="true"></svg>
+    <h2>Інвайроменталізм популярний, бо пояснює те, що бізнес бачить щодня</h2>
+    <div class="claims">
+      <p>Тиск ззовні реальний: війна, технології, регулятори. Теорія дає йому просту мову.</p>
+      <p>Але вона пояснює причини змін, а не якість відповіді на них.</p>
+      <p>Для менеджера змін звідси два завдання: діагностувати зовнішні сили й будувати внутрішню здатність відповідати на них.</p>
+    </div>
+    <p class="fine">Наскільки теорія «популярна» кількісно, ми не вимірювали. Висновки — інтерпретація зібраних джерел.</p>
+  </section>
+
+  <!-- 13. Джерела -->
+  <section class="slide" aria-label="Джерела">
+    <h2>Джерела</h2>
+    <div class="cols">
+      <div>
+        <h3>Теорія</h3>
+        <ul>
+          <li>Захарова О.В. Методичний посібник «Управління організаційними змінами». Черкаси: ЧДТУ, 2016.</li>
+          <li>Hrebiniak L.G., Joyce W.F. Organizational Adaptation: Strategic Choice and Environmental Determinism. Administrative Science Quarterly, 1985.</li>
+          <li>Gopalakrishnan S., Dugal M. Strategic Choice versus Environmental Determinism: A Debate Revisited. Int. J. of Organizational Analysis, 1998.</li>
+          <li>Mintzberg H., Ahlstrand B., Lampel J. Strategy Safari. 1998.</li>
+          <li>Hannan M., Freeman J. The Population Ecology of Organizations. American Journal of Sociology, 1977.</li>
+          <li>DiMaggio P., Powell W. The Iron Cage Revisited. American Sociological Review, 1983.</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Дані та дослідження</h3>
+        <ul>
+          <li>Innosight. Corporate Longevity (2016); 2021 Corporate Longevity Forecast.</li>
+          <li>VoxUkraine. Resilience of Ukraine's Small and Medium Businesses Amid the War (2025).</li>
+          <li>UNIDO IAP. The Changing Economic Geography of Ukraine: Firm Relocation and Policy Issues (2024).</li>
+          <li>Olechnicka A., Kniazevych A. War-induced relocation of high-tech companies. Int. Entrepreneurship Review, 2025.</li>
+          <li>Трансформація бізнес-моделей підприємств роздрібної торгівлі в умовах воєнного стану. Zenodo, 2025.</li>
+          <li>Institutional pressures and ESG disclosure similarity. Management Decision, 2026.</li>
+          <li>Institutional pressures, information asymmetry and ESG-washing. Int. J. of Disclosure and Governance, 2026.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<nav class="ctrl" aria-label="Навігація презентацією">
+  <button id="prev" aria-label="Попередній слайд">&#8592;</button>
+  <span class="count" id="count">1 / 13</span>
+  <button id="next" aria-label="Наступний слайд">&#8594;</button>
+</nav>
+
+<script>
+(function () {
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var countEl = document.getElementById('count');
+  var progress = document.getElementById('progress');
+  var idx = 0;
+
+  /* масштабування сцени 1280x720 під вікно */
+  function fit() {
+    var s = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    stage.style.transform = 'translate(-50%, -50%) scale(' + s + ')';
+  }
+  window.addEventListener('resize', fit);
+  fit();
+
+  /* ізобари: замкнені лінії навколо «організації» */
+  function drawIsobars(svg) {
+    var c = JSON.parse(svg.getAttribute('data-cfg'));
+    var NS = 'http://www.w3.org/2000/svg';
+    for (var i = 0; i < c.rings; i++) {
+      var r = c.base + i * c.gap;
+      var pts = [];
+      for (var k = 0; k <= 160; k++) {
+        var a = k / 160 * Math.PI * 2;
+        var wob = 1 + 0.055 * Math.sin(3 * a + c.seed + i * 0.35) + 0.035 * Math.sin(5 * a + c.seed * 2 + i * 0.2);
+        var stretch = 1 + c.squeeze * Math.cos(a) * (i / c.rings);
+        var rr = r * wob * stretch;
+        pts.push((c.cx + rr * Math.cos(a) * 1.15).toFixed(1) + ',' + (c.cy + rr * Math.sin(a) * 0.82).toFixed(1));
+      }
+      var p = document.createElementNS(NS, 'path');
+      p.setAttribute('d', 'M' + pts.join('L') + 'Z');
+      p.setAttribute('stroke-opacity', (0.85 - i * (0.7 / c.rings)).toFixed(2));
+      svg.appendChild(p);
+    }
+    var dot = document.createElementNS(NS, 'circle');
+    dot.setAttribute('cx', c.cx); dot.setAttribute('cy', c.cy); dot.setAttribute('r', 7);
+    dot.setAttribute('fill', '#E0A526');
+    svg.appendChild(dot);
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('svg.isobars'), drawIsobars);
+
+  /* навігація */
+  function show(n) {
+    idx = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (s, i) {
+      s.classList.toggle('active', i === idx);
+      s.classList.toggle('past', i < idx);
+      s.setAttribute('aria-hidden', i === idx ? 'false' : 'true');
+    });
+    countEl.textContent = (idx + 1) + ' / ' + slides.length;
+    progress.style.width = ((idx + 1) / slides.length * 100) + '%';
+    if (history.replaceState) history.replaceState(null, '', '#' + (idx + 1));
+  }
+  document.getElementById('next').addEventListener('click', function () { show(idx + 1); });
+  document.getElementById('prev').addEventListener('click', function () { show(idx - 1); });
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === 'PageDown' || k === ' ') { e.preventDefault(); show(idx + 1); }
+    else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); show(idx - 1); }
+    else if (k === 'Home') { show(0); }
+    else if (k === 'End') { show(slides.length - 1); }
+    else if (k === 'f' || k === 'F' || k === 'а' || k === 'А') {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+      else document.exitFullscreen && document.exitFullscreen();
+    }
+  });
+
+  var x0 = null;
+  document.addEventListener('touchstart', function (e) { x0 = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 50) show(idx + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, { passive: true });
+
+  var start = parseInt((location.hash || '').replace('#', ''), 10);
+  show(isNaN(start) ? 0 : start - 1);
+})();
+</script>
+</body>
+</html>
